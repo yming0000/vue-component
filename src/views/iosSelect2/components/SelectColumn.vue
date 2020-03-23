@@ -111,10 +111,10 @@
         ev.stopPropagation();
         ev.preventDefault();
         let move = (this.finger.startY - ev.targetTouches[0].pageY) + this.finger.prevMove;
-        if (move < 1 - (lineHeight / 2)) {
-          move = 1 - (lineHeight / 2);
-        } else if (move > ((this.values.length - 1) * lineHeight) - 1) {
-          move = ((this.values.length - (1 / 2)) * lineHeight) - 1;
+        if (move < 0) {
+          move = 0;
+        } else if (move > (this.values.length - 1) * lineHeight) {
+          move = (this.values.length - 1) * lineHeight;
         }
         this.finger.currentMove = move;
         this.$refs.wheel.style.transform = `rotate3d(1, 0, 0, ${(move / lineHeight) * singleDeg}deg)`;
@@ -157,7 +157,7 @@
         const v = s / t;
         const absV = Math.abs(v);
         isInertial = true;
-        if (this.finger.currentMove >= ((this.values.length - (1 / 2)) * lineHeight) - 1) {
+        if (this.finger.currentMove >= (this.values.length - 1) * lineHeight) {
           this.inertia(1, -1, 0);
         } else {
           this.inertia(absV, Math.floor(absV / v), 0);
@@ -179,10 +179,10 @@
         }
         // 这段时间走的位移 S = vt + 1/2at^2;
         let move = (position * start * (1000 / 60)) + (0.5 * a * (1000 / 60) * (1000 / 60)) + this.finger.currentMove;
-        if (move < 1 - (lineHeight / 2)) {
-          move = 1 - (lineHeight / 2);
-        } else if (move > ((this.values.length - (1 / 2)) * lineHeight) - 1) {
-          move = ((this.values.length - (1 / 2)) * lineHeight) - 1;
+        if (move < 0) {
+          move = 0;
+        } else if (move > (this.values.length - 1) * lineHeight) {
+          move = (this.values.length - 1) * lineHeight;
         }
         // 根据求末速度公式： v末 = v初 + at
         const newStart = (position * start) + (a * (1000 / 60));
